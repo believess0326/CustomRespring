@@ -19,13 +19,18 @@ jobs:
 
       - name: Setup Theos & Roothide SDK
         run: |
-          # 1. 安装基础依赖
+          # 1. 安装基础构建工具
           sudo apt-get update
-          sudo apt-get install -y build-essential perl libssl-dev clang llvm make zip unzip jq
+          sudo apt-get install -y build-essential perl libssl-dev clang llvm make zip unzip jq curl
           
           # 2. 克隆 Roothide 专用版 Theos
           git clone --recursive https://github.com/roothide/theos.git ~/theos
-          echo "THEOS=~/theos" >> $GITHUB_ENV
+          
+          # 3. 下载 iOS SDK 并解压至 theos/sdks 目录
+          curl -LO https://github.com/theos/sdks/archive/master.zip
+          unzip -q master.zip
+          mv sdks-master/* ~/theos/sdks/
+          rm -rf sdks-master master.zip
 
       - name: Build Tweak
         run: |
