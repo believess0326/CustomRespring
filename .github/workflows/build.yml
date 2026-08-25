@@ -14,15 +14,22 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Setup Theos & Roothide Toolchain
-        uses: obfuscatednature/theos-action@v1
         with:
-          theos-src: roothide/theos
-          theos-sdks: rootless
+          submodules: recursive
+
+      - name: Setup Theos & Roothide SDK
+        run: |
+          # 1. 安装基础依赖
+          sudo apt-get update
+          sudo apt-get install -y build-essential perl libssl-dev clang llvm make zip unzip jq
+          
+          # 2. 克隆 Roothide 专用版 Theos
+          git clone --recursive https://github.com/roothide/theos.git ~/theos
+          echo "THEOS=~/theos" >> $GITHUB_ENV
 
       - name: Build Tweak
         run: |
+          export THEOS=~/theos
           make clean
           make package FINALPACKAGE=1
 
