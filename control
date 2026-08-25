@@ -2,7 +2,7 @@ Package: com.believess.customrespring
 Name: CustomRespring
 Depends: mobilesubstrate (>= 0.9.5000)
 Version: 1.0.0
-Architecture: iphoneos-arm64,iphoneos-arm64e
+Architecture: iphoneos-arm64
 Description:  iOS 注销动画替换
 Maintainer: believess
 Author: believess
