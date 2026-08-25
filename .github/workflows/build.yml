@@ -17,20 +17,26 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Setup Theos & Roothide SDK
+      - name: Setup Theos & Roothide Toolchain
         run: |
-          # 1. 安装基础构建工具
+          # 1. 安装基础工具
           sudo apt-get update
           sudo apt-get install -y build-essential perl libssl-dev clang llvm make zip unzip jq curl
           
           # 2. 克隆 Roothide 专用版 Theos
           git clone --recursive https://github.com/roothide/theos.git ~/theos
           
-          # 3. 下载 iOS SDK 并解压至 theos/sdks 目录
+          # 3. 下载并补全 iOS SDK
           curl -LO https://github.com/theos/sdks/archive/master.zip
           unzip -q master.zip
           mv sdks-master/* ~/theos/sdks/
           rm -rf sdks-master master.zip
+
+          # 4. 下载并安装 Linux 交叉编译器 (Toolchain)
+          curl -LO https://github.com/theos/toolchain/releases/download/v1.0.0/linux-x86_64-toolchain.tar.lzma
+          mkdir -p ~/theos/toolchain/linux/iphone
+          tar -xf linux-x86_64-toolchain.tar.lzma -C ~/theos/toolchain/linux/iphone
+          rm linux-x86_64-toolchain.tar.lzma
 
       - name: Build Tweak
         run: |
