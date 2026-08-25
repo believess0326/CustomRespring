@@ -1,0 +1,33 @@
+name: Build Roothide Tweak
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Theos & Roothide Toolchain
+        uses: obfuscatednature/theos-action@v1
+        with:
+          theos-src: roothide/theos
+          theos-sdks: rootless
+
+      - name: Build Tweak
+        run: |
+          make clean
+          make package FINALPACKAGE=1
+
+      - name: Upload DEB Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CustomRespring-Roothide-DEB
+          path: packages/*.deb
