@@ -19,7 +19,7 @@ jobs:
 
       - name: Setup Homebrew Dependencies
         run: |
-          brew install dpkg
+          brew install dpkg ldid
 
       - name: Setup Roothide Theos & SDK
         run: |
